@@ -20,17 +20,22 @@ class Zetta:
         self.g = F.GREEN
         self.y = F.YELLOW
         self.re = F.RESET
+        self.port = 80
         
     def send(self):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((self.ip, 80))
+            s.connect((self.ip, self.port))
             s.send(str.encode(self.main_req))
             self.count += 1
             print(f"{self.g}[+]{self.re} Sent packet {self.count}")
             
         except Exception as e:
-            s.close()
+            if self.port == 80:
+                self.port == 443
+                self.target_host = f"GET / HTTP/1.1\r\nHost: {self.ip}:{self.port}\r\n"
+                
+                
             print(f"{self.r}[-]{self.re} Didn't send packet. Error: {e}")
 
 def main():
